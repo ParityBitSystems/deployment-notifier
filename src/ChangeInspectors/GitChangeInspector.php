@@ -11,9 +11,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 class GitChangeInspector implements ChangeInspector
 {
     protected $repoDirectory;
+    protected $processBuilder;
 
-    public function __construct($repoDirectory)
+    public function __construct(ProcessBuilder $builder, $repoDirectory)
     {
+        $this->processBuilder = $builder;
         $this->repoDirectory = $repoDirectory;
 
         // folder exists
@@ -30,7 +32,7 @@ class GitChangeInspector implements ChangeInspector
 
     public function getGitLogFromDeployment(Deployment $deployment)
     {
-        $builder = new ProcessBuilder();
+        $builder = clone $this->processBuilder;
         $builder->setPrefix('git log');
 
         if (!is_null($deployment->getPreviousVersion())) {
