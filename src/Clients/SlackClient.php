@@ -2,15 +2,19 @@
 
 namespace ParityBit\DeploymentNotifier\Clients;
 
+use Curl\Curl;
+
 class SlackClient
 {
+    protected $curl;
     protected $webhookUrl;
     protected $channels = [];
     protected $iconUrl = null;
     protected $username = null;
 
-    public function __construct($webhookUrl, $channels = [], $username = 'Deployment Notifier', $iconUrl = null)
+    public function __construct(Curl $curl, $webhookUrl, $channels = [], $username = 'Deployment Notifier', $iconUrl = null)
     {
+        $this->curl = $curl;
         $this->webhookUrl = $webhookUrl;
         $this->channels = $channels;
         $this->username = $username;
@@ -22,20 +26,14 @@ class SlackClient
         foreach ($this->channels as $channel) {
             $payload = $this->getPayload($message, $channel);
 
-            $ch = curl_init();
-
-            curl_setopt($ch, \CURLOPT_URL, $this->webhookUrl);
-
-            curl_setopt($ch, \CURLOPT_POST, 1);
-            curl_setopt($ch, \CURLOPT_POSTFIELDS, 'payload=' .json_encode($payload));
-
-            curl_exec($ch);
-
-            curl_close($ch);
+            $this->curl->post(
+                $this->webhookUrl,
+                'payload=' . json_encode($payload)
+            );
         }
     }
 
-    protected function getPayload($message, $channel)
+    public function getPayload($message, $channel)
     {
         $payload = [];
 
