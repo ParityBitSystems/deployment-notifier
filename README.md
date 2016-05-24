@@ -1,5 +1,7 @@
 # Deployment Notifier
 
+[![Build Status](https://travis-ci.org/ParityBitSystems/deployment-notifier.svg?branch=master)](https://travis-ci.org/ParityBitSystems/deployment-notifier)
+
 A work-in-progress tool to notify services of deployments in your infrastructure.
 
 The initial version only supports emailing stakeholders, pinging codebasehq and slack.
