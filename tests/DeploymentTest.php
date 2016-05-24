@@ -2,6 +2,8 @@
 
 namespace ParityBit\DeploymentNotifier;
 
+use ParityBit\DeploymentNotifier\ChangeInspectors\ChangeInspector;
+
 class DeploymentTest extends \PHPUnit_Framework_TestCase
 {
     protected $faker;
@@ -9,6 +11,7 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
     protected $currentVersion;
     protected $environment;
     protected $server;
+    protected $changeInspector;
 
     public function setUp()
     {
@@ -17,12 +20,14 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
         $this->currentVersion = new Version($this->faker->word);
         $this->environment = new Environment($this->faker->word);
         $this->server = new Server($this->faker->word);
+        $this->changeInspector = $this->getMock(ChangeInspector::class);
 
         $this->deployment = new Deployment(
             $this->environment,
             $this->previousVersion,
             $this->currentVersion,
-            $this->server
+            $this->server,
+            $this->changeInspector
         );
     }
 
@@ -56,5 +61,35 @@ class DeploymentTest extends \PHPUnit_Framework_TestCase
             $this->server,
             $this->deployment->getServer()
         );
+    }
+
+    public function testGetChanges()
+    {
+        $changes = [
+            $this->faker->word,
+            $this->faker->word,
+            $this->faker->word,
+        ];
+
+        $this->changeInspector = $this->getMockBuilder(ChangeInspector::class)
+                                      ->disableOriginalConstructor()
+                                      ->setMethods(['getChangesFromDeployment'])
+                                      ->getMock();
+        $this->changeInspector->expects($this->once())
+                              ->method('getChangesFromDeployment')
+                              ->with($this->callback(function ($subject) {
+                                  return $subject == $this->deployment;
+                              }))
+                              ->will($this->returnValue($changes));
+
+        $this->deployment = new Deployment(
+            $this->environment,
+            $this->previousVersion,
+            $this->currentVersion,
+            $this->server,
+            $this->changeInspector
+        );
+
+        $this->assertEquals($changes, $this->deployment->getChanges());
     }
 }

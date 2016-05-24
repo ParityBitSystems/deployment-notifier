@@ -13,7 +13,7 @@ class CodebaseClient
         'Content-type: application/xml',
     ];
 
-	const endpoint = 'http://api3.codebasehq.com/';
+	const WEBSERVICE_URL = 'http://api3.codebasehq.com/';
 
     public function __construct($username, $password)
     {

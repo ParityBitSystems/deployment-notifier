@@ -2,6 +2,8 @@
 
 namespace ParityBit\DeploymentNotifier;
 
+use ParityBit\DeploymentNotifier\ChangeInspectors\ChangeInspector;
+
 class Deployment
 {
     protected $environment;
@@ -9,17 +11,20 @@ class Deployment
     protected $currentVersion;
     protected $changes = null;
     protected $server;
+    protected $changeInspector;
 
     public function __construct(
         Environment $environment,
         Version $previousVersion,
         Version $currentVersion,
-        Server $server)
+        Server $server,
+        ChangeInspector $changeInspector)
     {
         $this->environment = $environment;
         $this->previousVersion = $previousVersion;
         $this->currentVersion = $currentVersion;
         $this->server = $server;
+        $this->changeInspector = $changeInspector;
     }
 
     public function getEnvironment()
@@ -44,6 +49,10 @@ class Deployment
 
     public function getChanges()
     {
+        if (is_null($this->changes)) {
+            $this->changes = $this->changeInspector->getChangesFromDeployment($this);
+        }
 
+        return $this->changes;
     }
 }
