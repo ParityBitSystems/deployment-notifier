@@ -52,7 +52,7 @@ class CodebaseClient
         }
     }
 
-    public function updateTicketStatus($project, $ticketId, $newStatus)
+    public function updateTicketStatus($ticketId, $newStatus)
     {
         $payload = "<ticket-note>
     <changes>

@@ -112,7 +112,7 @@ class CodebaseClientTest extends \PHPUnit_Framework_TestCase
 
         $this->buildClient();
 
-        $this->codebaseClient->updateTicketStatus($this->project, $ticketId, $newStatus);
+        $this->codebaseClient->updateTicketStatus($ticketId, $newStatus);
     }
 
     public function testRegisterDeployment()
