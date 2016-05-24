@@ -59,7 +59,7 @@ class GitChangeInspector implements ChangeInspector
         $change = new Change();
         foreach ($gitLog as $line) {
             if(strpos($line, 'commit') === 0) {
-                if (null !== $change->reference) {
+                if (!is_null($change->reference)) {
                     $change->fullDescription = trim($change->fullDescription);
                     $changes[] = $change;
                     $change = new Change();
@@ -70,7 +70,7 @@ class GitChangeInspector implements ChangeInspector
             } elseif (preg_match('/^\s/', $line)) {
                 $line = trim($line);
                 if ('' != $line) {
-                    if (null == $change->summary) {
+                    if (is_null($change->summary)) {
                         $change->summary = $line;
                     }
                     $change->fullDescription .= $line . PHP_EOL;

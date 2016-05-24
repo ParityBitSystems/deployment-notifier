@@ -7,7 +7,7 @@ use ParityBit\DeploymentNotifier\Deployment;
 
 class NewRelicNotifier implements Notifier
 {
-    protected $client = $client;
+    protected $client;
 
     public function __construct(NewRelicClient $client)
     {

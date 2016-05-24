@@ -29,7 +29,7 @@ class SlackClient
             curl_setopt($ch, \CURLOPT_POST, 1);
             curl_setopt($ch, \CURLOPT_POSTFIELDS, 'payload=' .json_encode($payload));
 
-            $result = curl_exec($ch);
+            curl_exec($ch);
 
             curl_close($ch);
         }

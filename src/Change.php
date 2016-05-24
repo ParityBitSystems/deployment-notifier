@@ -38,8 +38,6 @@ class Change
      * @param string $author
      * @param string $fullDescription
      * @param string $reference
-     *
-     * @return null
      */
     public function __construct($summary = null, $author = null, $fullDescription = null, $reference = null)
     {

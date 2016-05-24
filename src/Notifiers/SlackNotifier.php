@@ -10,6 +10,8 @@ use ParityBit\DeploymentNotifier\Deployment;
  */
 class SlackNotifier implements Notifier
 {
+    protected $client;
+
     public function __construct(SlackClient $client)
     {
         $this->client = $client;
